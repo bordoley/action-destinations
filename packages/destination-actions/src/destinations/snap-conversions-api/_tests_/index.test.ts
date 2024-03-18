@@ -2,7 +2,6 @@ import nock from 'nock'
 import { createTestEvent, createTestIntegration } from '@segment/actions-core'
 import Definition from '../index'
 import { Settings } from '../generated-types'
-import { buildRequestURL } from '../reportConversionEvent/snap-capi-v3'
 
 const testDestination = createTestIntegration(Definition)
 const timestamp = '2022-05-12T15:21:15.449Z'
@@ -360,7 +359,7 @@ describe('Snap Conversions API ', () => {
               event_conversion_type: 'WEB'
             }
           })
-        ).rejects.toThrowError('Galleon is not a valid currency code.')
+        ).rejects.toThrowError('GALLEON is not a valid currency code.')
       })
 
       it('should fail missing event conversion type', async () => {
@@ -382,7 +381,7 @@ describe('Snap Conversions API ', () => {
               event_type: 'PURCHASE'
             }
           })
-        ).rejects.toThrowError("The root value is missing the required field 'event_conversion_type'.")
+        ).rejects.toThrowError("The root value is missing the required field 'action_source'.")
       })
 
       it('should handle a custom event', async () => {
@@ -666,7 +665,7 @@ describe('Snap Conversions API ', () => {
           }
         })
 
-        expect(responses[0].url).toBe(buildRequestURL('pixel123', 'access123'))
+        expect(responses[0].url).toBe('https://tr.snapchat.com/v3/pixel123/events?access_token=access123')
       })
 
       it('should trim a pixel id with leading or trailing whitespace', async () => {
@@ -693,7 +692,7 @@ describe('Snap Conversions API ', () => {
           }
         })
 
-        expect(responses[0].url).toBe(buildRequestURL('pixel123', 'access123'))
+        expect(responses[0].url).toBe('https://tr.snapchat.com/v3/pixel123/events?access_token=access123')
       })
 
       it('should exclude number_items that is not a valid integer', async () => {
@@ -721,7 +720,7 @@ describe('Snap Conversions API ', () => {
           }
         })
 
-        expect(responses[0].url).toBe(buildRequestURL('pixel123', 'access123'))
+        expect(responses[0].url).toBe('https://tr.snapchat.com/v3/pixel123/events?access_token=access123')
 
         const body = JSON.parse(responses[0].options.body as string)
         const { data } = body
